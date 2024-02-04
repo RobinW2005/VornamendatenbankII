@@ -1,0 +1,3 @@
+/home/robinw/CLionProjects/VornamendatenbankII/cmake-build-debug/CMakeFiles/VornamendatenbankII.dir
+/home/robinw/CLionProjects/VornamendatenbankII/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/robinw/CLionProjects/VornamendatenbankII/cmake-build-debug/CMakeFiles/rebuild_cache.dir
