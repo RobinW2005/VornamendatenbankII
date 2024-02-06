@@ -1,4 +1,4 @@
-#include "Name.h"
+#include "Name.hpp"
 #include "menue.hpp"
 #include <iostream>
 
@@ -25,10 +25,10 @@ void auswahl(unsigned int choice){
     switch(choice)
     {
         case 1: {
-            std::string name1;
+            std::string requestedname;
             std::cout << "Zu welchem Namen soll das Histogramm ausgeben werden?\n";
-            std::cin >> name1;
-            Data.histogramm(name1);
+            std::cin >> requestedname;
+            Data.createHistogramm(requestedname);
             break;
         }
 
@@ -36,18 +36,18 @@ void auswahl(unsigned int choice){
             int jahr;
             std::cout << "In welchem Jahr soll nach gleichen Namen gesucht werden?\n";
             std::cin >> jahr;
-            Data.sameNameSearch(jahr);
+            Data.searchingSameName(jahr);
             break;
         }
 
         case 3: {
-            std::string name2;
+            std::string requestedname;
             int year;
             std::cout << "Nach welchem Namen soll gesucht werden?\n";
-            std::cin >> name2;
+            std::cin >> requestedname;
             std::cout << "In welchem Jahr soll gesucht werden?\n";
             std::cin >> year;
-            Data.data[year - 1880].probilityOfName(name2, Data.data[year - 1880]);
+            Data.data[year - 1880].probilityOfName(requestedname);
             break;
         }
     }

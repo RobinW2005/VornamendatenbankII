@@ -1,4 +1,4 @@
-#include "Name.h"
+#include "Name.hpp"
 #include <istream>
 #include <fstream>
 #include <iomanip>
@@ -27,6 +27,7 @@ Year::Year() {
     }
 }
 
+
 std::ostream &operator<<(std::ostream& os, const Name& obj) {
     os << obj.name << ", " << obj.gender << ", " << obj.count << std::endl;
     return os;
@@ -43,14 +44,13 @@ void NameYear::stringSplit(std::string &line, std::string &name, char &gender, i
 }
 
 //Kopffunktion für die Ausgabe des Histogramms
-void Year::histogramm(const std::string &name) {
-    int namecount[143]; //Erstellt einen Array, der mit der Anzahl der Namen in den Jahren befüllt wird
+void Year::createHistogramm(std::string &name) {
+    int countOfNames[143]; //Erstellt einen Array, der mit der Anzahl der Namen in den Jahren befüllt wird
     for (int i = 0; i < 143; i++){
-        namecount[i] = data[i].nameCount(name, data[i]);
+        countOfNames[i] = data[i].findNameCount(name);
     }
     int cutdata[29];
-    arrayDataCut(namecount, cutdata);
-    //Sucht die Anzahl der Namen in den Jahren und befüllt den Array mit diesen Werten
+    arrayDataCut(countOfNames, cutdata);
     histogrammOut(cutdata, name);
 }
 
@@ -108,9 +108,9 @@ void Year::arrayDataCut(int counts[143], int cutdata[29]){
 }
 
 //Soll für das Histogramm die Vectoren nach meinem eingebenen Vector filtern und dann die Anzahl des jeweiligen Names zurückgeben
-int NameYear::nameCount(std::string name, NameYear &myYear) {
+int NameYear::findNameCount(std::string name) {
     int temp = 0;
-    for (size_t i = 0; i < myYear.names.size(); i++) { //Durchsucht ein Jahr nach meinem Namen
+    for (size_t i = 0; i < names.size(); i++) { //Durchsucht ein Jahr nach meinem Namen
         if (name == names[i].name) {
             temp += names[i].count;
         }
@@ -119,7 +119,7 @@ int NameYear::nameCount(std::string name, NameYear &myYear) {
 }
 
 //Soll in einem Jahr nach zweimal dem gleichen Namen suchen und dann die Daten von den Namen ausgeben
-void Year::sameNameSearch(int jahr) {
+void Year::searchingSameName(int jahr) {
     for(size_t i = 0; i < data[jahr-1880].names.size(); i++) {
         for (size_t j = i + 1; j < data[jahr-1880].names.size(); j++) {
             if (data[jahr-1880].names[i].name == data[jahr-1880].names[j].name) {
@@ -132,32 +132,32 @@ void Year::sameNameSearch(int jahr) {
     }
 }
 
-void NameYear::probilityOfName(std::string name, NameYear &myYear) {
-    double total = nameCount(name, myYear);
-    double pos1;
-    double pos2;
+void NameYear::probilityOfName(std::string name) {
+    double totalcount = findNameCount(name);
+    double firstpositionofname;
+    double secondpositionofname;
 
-    for (size_t i = 0; i < myYear.names.size(); i++) {
-        if (myYear.names[i].name == name) {
-            pos1 = i;
+    for (size_t i = 0; i < names.size(); i++) {
+        if (names[i].name == name) {
+            firstpositionofname = i;
             break;
         }
     }
-    for (size_t i = pos1+1; i < myYear.names.size(); i++) {
-        if (myYear.names[i].name == name) {
-            pos2 = i;
+    for (size_t i = firstpositionofname+1; i < names.size(); i++) {
+        if (names[i].name == name) {
+            secondpositionofname = i;
             break;
         }
     }
-    double probability1 = (myYear.names[pos1].count / total)*100;
-    double probability2 = (myYear.names[pos2].count / total)*100;
+    double probability1 = (names[firstpositionofname].count / totalcount)*100;
+    double probability2 = (names[secondpositionofname].count / totalcount)*100;
 
-    std::cout << total << "," << myYear.names[pos1].count << "," << myYear.names[pos2].count << "\n";
-    std::cout << "Die Wahrscheinlichkeit, dass " << name << " in diesem Jahr weiblich vergeben ist, ist: " << std::setprecision(precision(probability1)) << probability1 <<"%.\n";
-    std::cout << "Die Wahrscheinlichkeit, dass " << name << " in diesem Jahr männlich vergeben ist, ist: " << std::setprecision(precision(probability2)) << probability2 <<"%.\n";
+    std::cout << totalcount << "," << names[firstpositionofname].count << "," << names[secondpositionofname].count << "\n";
+    std::cout << "Die Wahrscheinlichkeit, dass " << name << " in diesem Jahr weiblich vergeben ist, ist: " << std::setprecision(findPrecision(probability1)) << probability1 <<"%.\n";
+    std::cout << "Die Wahrscheinlichkeit, dass " << name << " in diesem Jahr männlich vergeben ist, ist: " << std::setprecision(findPrecision(probability2)) << probability2 <<"%.\n";
 }
 
-int NameYear::precision(double probability) {
+int NameYear::findPrecision(double probability) {
     int n;
     if (probability < 1) {
         n = 2;
